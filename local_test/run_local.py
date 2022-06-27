@@ -39,6 +39,11 @@ from requirements.txt file, and then use that virtual env to do your testing.
 This isnt foolproof. You can still have host os-related issues, so beware. 
 '''
 
+dataset_name = "abalone"; id_col = "Id"; target_col = "Rings";
+# dataset_name = "auto_prices"; id_col = "id"; target_col = "price";
+# dataset_name = "computer_activity"; id_col = "id"; target_col = "usr";
+# dataset_name = "heart_disease"; id_col = "Id"; target_col = "num";
+# dataset_name = "white_wine"; id_col = "id"; target_col = "quality";
 
 
 def create_ml_vol():    
@@ -96,7 +101,7 @@ def run_HPT():
     # read data config
     data_schema = utils.get_data_schema(data_schema_path)  
     # run hyper-parameter tuning. This saves results in each trial, so nothing is returned
-    num_trials = 15
+    num_trials = 20
     model_tuner.tune_hyperparameters(train_data, data_schema, num_trials, hyper_param_path, hpt_results_path)
 
 
@@ -110,10 +115,9 @@ def train_and_save_algo():
     # get trained preprocessor, model, training history 
     preprocessor, model= model_trainer.get_trained_model(train_data, data_schema, hyper_parameters)            
     # Save the processing pipeline   
-    pipeline.save_preprocessor(preprocessor, model_path)
+    pipeline.save_preprocessor(preprocessor, model_artifacts_path)
     # Save the model 
-    elasticnet_sklearn.save_model(model, model_path)
-
+    elasticnet_sklearn.save_model(model, model_artifacts_path)
     print("done with training")
 
 
@@ -123,7 +127,7 @@ def load_and_test_algo():
     # read data config
     data_schema = utils.get_data_schema(data_schema_path)    
     # instantiate the trained model 
-    predictor = model_server.ModelServer(model_path)
+    predictor = model_server.ModelServer(model_artifacts_path)
     # make predictions
     predictions = predictor.predict(test_data, data_schema)
     # save predictions
@@ -134,10 +138,10 @@ def load_and_test_algo():
 
 
 def score(test_data, predictions): 
-    predictions = predictions.merge(test_data[["Id", "Rings"]], on="Id")
-    rmse = mean_squared_error(predictions["Rings"], predictions['prediction'], squared=False)
-    r2 = r2_score(predictions["Rings"], predictions['prediction'])
-    print(f"rmse: {rmse},  r2: {r2}")
+    predictions = predictions.merge(test_data[[id_col, target_col]], on=id_col)
+    rmse = mean_squared_error(predictions[target_col], predictions['prediction'], squared=False)
+    r2 = r2_score(predictions[target_col], predictions['prediction'])
+    print(f"rmse: {rmse},  r2: {r2}") 
 
 
 
