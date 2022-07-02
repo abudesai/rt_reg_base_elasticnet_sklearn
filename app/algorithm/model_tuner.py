@@ -52,7 +52,7 @@ def get_default_hps(hpt_specs):
 def load_best_hyperspace(results_path):
     results = [ f for f in list(sorted(os.listdir(results_path))) if 'json' in f ]
     if len(results) == 0: return None
-    best_result_name = results[-1]
+    best_result_name = results[-1]  # ours is maximization, so return the last file (highest)
     best_result_file_path = os.path.join(results_path, best_result_name)
     return utils.get_json_file(best_result_file_path, "best_hpt_results")
 
@@ -120,7 +120,7 @@ def tune_hyperparameters(data, data_schema, num_trials, hyper_param_path, hpt_re
         score = model.evaluate(valid_X, valid_y)
 
         # Our optimizing metric is the model loss fn
-        opt_metric = -score 
+        opt_metric = score
         if np.isnan(opt_metric): opt_metric = 1.0e5     # sometimes loss becomes inf, so use a large value
         # create a unique model name for the trial - we add loss into file name 
         # so we can later sort by file names, and get the best score file without reading each file
@@ -137,7 +137,9 @@ def tune_hyperparameters(data, data_schema, num_trials, hyper_param_path, hpt_re
         utils.save_json(os.path.join(hpt_results_path, model_name + ".json"), result)
         # Save the best model parameters found so far in case the HPO job is killed
         save_best_parameters(hpt_results_path, hyper_param_path)
-        return opt_metric
+        # returning negative because our score metric is r-sq which we want to maximize, 
+        # but gp_minimize does minimization 
+        return -opt_metric
     
     
     n_initial_points = int(max(1, min(num_trials/3, 5)))
