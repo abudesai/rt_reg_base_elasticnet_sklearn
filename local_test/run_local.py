@@ -3,7 +3,6 @@ import sys
 import time
 import pandas as pd, numpy as np
 import pprint
-from skopt.space import Real, Categorical, Integer
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
 sys.path.insert(0, './../app')
