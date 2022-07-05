@@ -1,0 +1,7 @@
+model,dataset_name,run_hpt,num_hpt_trials,rmse,r2,elapsed_time_in_minutes
+elasticnet_sklearn,abalone,True,20,2.1248,0.3697,0.02
+elasticnet_sklearn,auto_prices,True,20,3255.2894,0.841,0.02
+elasticnet_sklearn,computer_activity,True,20,8.1057,0.6922,0.11
+elasticnet_sklearn,heart_disease,True,20,0.8577,0.4394,0.02
+elasticnet_sklearn,white_wine,True,20,0.845,0.1696,0.03
+elasticnet_sklearn,ailerons,True,20,0.0002,0.7485,0.45
