@@ -12,7 +12,7 @@ import algorithm.preprocessing.preprocess_utils as pp_utils
 import algorithm.utils as utils
 
 #import algorithm.scoring as scoring
-from algorithm.model.elasticnet_sklearn import ElasticNet_sklearn
+from algorithm.model.elasticnet_sklearn import ElasticNetSklearn
 from algorithm.utils import get_model_config
 
 
@@ -25,15 +25,15 @@ def get_trained_model(data, data_schema, hyper_params):
     # set random seeds
     utils.set_seeds()
     
-    # perform train/valid split 
-    train_data, valid_data = train_test_split(data, test_size=model_cfg['valid_split'])
-    # print('train_data shape:',  train_data.shape, 'valid_data shape:', valid_data.shape) 
+    # normally we do train, valid split, but we are not doing that here
+    train_data = data
+    # print('train_data shape:',  train_data.shape)  
     
     # preprocess data
     print("Pre-processing data...")
-    train_data, valid_data, preprocess_pipe = preprocess_data(train_data, valid_data, data_schema)    
-    train_X, train_y = train_data['X'].astype(np.float), train_data['y'].astype(np.float)
-    #valid_X, valid_y = valid_data['X'].astype(np.float), valid_data['y'].astype(np.float)       
+    train_data, _, preprocess_pipe = preprocess_data(train_data, None, data_schema)  
+    train_X, train_y = train_data['X'].astype(np.float), train_data['y'].astype(np.float)  
+    # print('train_X/y shape:',  train_X.shape, train_y.shape)              
               
     # Create and train model     
     print('Fitting model ...')  
@@ -42,14 +42,11 @@ def get_trained_model(data, data_schema, hyper_params):
     return preprocess_pipe, model
 
 
-def train_model(train_X, train_y, hyper_params):    
-    # get model hyper-paameters parameters 
-    #data_based_params = get_data_based_model_params(train_X)
-    #model_params = { **data_based_params, **hyper_params }
+def train_model(train_X, train_y, hyper_params):  
     model_params = { **hyper_params }
     
     # Create and train model   
-    model = ElasticNet_sklearn(  **model_params )  
+    model = ElasticNetSklearn(  **model_params )  
     # model.summary()  
     model.fit(
         train_X=train_X, train_y=train_y
@@ -65,7 +62,8 @@ def preprocess_data(train_data, valid_data, data_schema):
     train_data = preprocess_pipe.fit_transform(train_data)
     # print("Processed train X/y data shape", train_data['X'].shape, train_data['y'].shape)
       
-    valid_data = preprocess_pipe.transform(valid_data)
+    if valid_data is not None:
+        valid_data = preprocess_pipe.transform(valid_data)
     # print("Processed valid X/y data shape", valid_data['X'].shape, valid_data['y'].shape)
     return train_data, valid_data, preprocess_pipe 
 

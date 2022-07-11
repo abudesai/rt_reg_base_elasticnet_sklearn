@@ -5,18 +5,18 @@ import sys
 import os, warnings
 warnings.filterwarnings('ignore') 
 
-from sklearn.linear_model import ElasticNet
+from sklearn.linear_model import ElasticNet 
+from sklearn.metrics import mean_squared_error
 
 
 model_params_fname = "model_params.save"
 model_fname = "model.save"
 history_fname = "history.json"
-MODEL_NAME = "ElasticNet_sklearn"
+MODEL_NAME = "ElasticNetSklearn"
 
-class ElasticNet_sklearn(): 
+class ElasticNetSklearn(): 
     
     def __init__(self, l1_ratio=0.1, alpha=1, **kwargs) -> None:
-        super(ElasticNet_sklearn, self).__init__(**kwargs)
         self.l1_ratio = np.float(l1_ratio)
         self.alpha = np.float(alpha)
         
@@ -50,23 +50,18 @@ class ElasticNet_sklearn():
     def evaluate(self, x_test, y_test): 
         """Evaluate the model and return the loss and metrics"""
         if self.model is not None:
-            return self.model.score(x_test, y_test)        
+            # return self.model.score(x_test, y_test)        
+            preds = self.model.predict(x_test)
+            mse = mean_squared_error(y_test, preds, squared=False)
+            return mse  
 
     
     def save(self, model_path): 
-        model_params = {
-            "l1_ratio": self.l1_ratio,
-            "alpha":self.alpha
-            
-        }
-        joblib.dump(model_params, os.path.join(model_path, model_params_fname))
-
         joblib.dump(self.model, os.path.join(model_path, model_fname))
+
 
     @classmethod
     def load(cls, model_path): 
-        model_params = joblib.load(os.path.join(model_path, model_params_fname))
-
         elasticnet = joblib.load(os.path.join(model_path, model_fname))
         return elasticnet
 
@@ -77,15 +72,10 @@ def save_model(model, model_path):
 
 def load_model(model_path): 
     try: 
-        model = ElasticNet_sklearn.load(model_path)        
+        model = ElasticNetSklearn.load(model_path)        
     except: 
         raise Exception(f'''Error loading the trained {MODEL_NAME} model. 
             Do you have the right trained model in path: {model_path}?''')
     return model
 
 
-def save_training_history(history, f_path): 
-    hist_df = pd.DataFrame(history.history) 
-    hist_json_file = os.path.join(f_path, history_fname)
-    with open(hist_json_file, mode='w') as f:
-        hist_df.to_json(f)

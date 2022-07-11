@@ -6,7 +6,7 @@ from skopt import gp_minimize
 from skopt.space import Real, Categorical, Integer
 from skopt.utils import use_named_args
 
-import os
+import os 
 import warnings
 import sys
 from sklearn.model_selection import train_test_split
@@ -52,7 +52,7 @@ def get_default_hps(hpt_specs):
 def load_best_hyperspace(results_path):
     results = [ f for f in list(sorted(os.listdir(results_path))) if 'json' in f ]
     if len(results) == 0: return None
-    best_result_name = results[-1]  # ours is maximization, so return the last file (highest)
+    best_result_name = results[0]  
     best_result_file_path = os.path.join(results_path, best_result_name)
     return utils.get_json_file(best_result_file_path, "best_hpt_results")
 
@@ -117,10 +117,10 @@ def tune_hyperparameters(data, data_schema, num_trials, hyper_param_path, hpt_re
         model = model_trainer.train_model(train_X, train_y, hyperparameters) 
 
         # evaluate the model
-        score = model.evaluate(valid_X, valid_y)
+        score = model.evaluate(valid_X, valid_y)  # returns rmse
 
         # Our optimizing metric is the model loss fn
-        opt_metric = score
+        opt_metric = score  # rmse
         if np.isnan(opt_metric): opt_metric = 1.0e5     # sometimes loss becomes inf, so use a large value
         # create a unique model name for the trial - we add loss into file name 
         # so we can later sort by file names, and get the best score file without reading each file
@@ -131,15 +131,12 @@ def tune_hyperparameters(data, data_schema, num_trials, hyper_param_path, hpt_re
             'model_name': model_name,    
             'space': hyperparameters, 
             'loss': opt_metric, 
-            # 'history': pd.DataFrame(history.history).to_json(),
         }
         # Save training results to disks with unique filenames
         utils.save_json(os.path.join(hpt_results_path, model_name + ".json"), result)
         # Save the best model parameters found so far in case the HPO job is killed
         save_best_parameters(hpt_results_path, hyper_param_path)
-        # returning negative because our score metric is r-sq which we want to maximize, 
-        # but gp_minimize does minimization 
-        return -opt_metric
+        return opt_metric
     
     
     n_initial_points = int(max(1, min(num_trials/3, 5)))

@@ -13,7 +13,7 @@ import algorithm.model_tuner as model_tuner
 import algorithm.preprocessing.pipeline as pipeline
 import algorithm.model.elasticnet_sklearn as elasticnet_sklearn
 
-
+model_name= "Elasticnet_sklearn"
 inputs_path = "./ml_vol/inputs/"
 
 data_schema_path = os.path.join(inputs_path, "data_config")
@@ -40,11 +40,11 @@ this script is useful for doing the algorithm testing locally without needing
 to build the docker image and run the container.
 make sure you create your virtual environment, install the dependencies
 from requirements.txt file, and then use that virtual env to do your testing.
-This isnt foolproof. You can still have host os-related issues, so beware.
+This isnt foolproof. You can still have host os or python version-related issues, so beware.
 '''
 
-model_name = "elasticnet_sklearn"
 
+model_name= elasticnet_sklearn.MODEL_NAME
 
 def create_ml_vol():
     dir_tree = {
