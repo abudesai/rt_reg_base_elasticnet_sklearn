@@ -14,8 +14,8 @@ model_fname = "model.save"
 history_fname = "history.json"
 MODEL_NAME = "ElasticNetSklearn"
 
-class ElasticNetSklearn(): 
-    
+
+class ElasticNetSklearn():     
     def __init__(self, l1_ratio=0.1, alpha=1, **kwargs) -> None:
         self.l1_ratio = np.float(l1_ratio)
         self.alpha = np.float(alpha)
