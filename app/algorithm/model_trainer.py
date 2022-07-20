@@ -4,7 +4,6 @@ import os, warnings, sys
 warnings.filterwarnings('ignore') 
 
 import numpy as np, pandas as pd
-from sklearn.model_selection import KFold, train_test_split
 
 
 import algorithm.preprocessing.pipeline as pp_pipe
@@ -12,7 +11,7 @@ import algorithm.preprocessing.preprocess_utils as pp_utils
 import algorithm.utils as utils
 
 #import algorithm.scoring as scoring
-from algorithm.model.elasticnet_sklearn import ElasticNetSklearn
+from algorithm.model.regressor import Regressor
 from algorithm.utils import get_model_config
 
 
@@ -46,7 +45,7 @@ def train_model(train_X, train_y, hyper_params):
     model_params = { **hyper_params }
     
     # Create and train model   
-    model = ElasticNetSklearn(  **model_params )  
+    model = Regressor(  **model_params )  
     # model.summary()  
     model.fit(
         train_X=train_X, train_y=train_y

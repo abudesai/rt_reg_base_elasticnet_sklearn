@@ -15,7 +15,7 @@ history_fname = "history.json"
 MODEL_NAME = "ElasticNetSklearn"
 
 
-class ElasticNetSklearn():     
+class Regressor():     
     def __init__(self, l1_ratio=0.1, alpha=1, **kwargs) -> None:
         self.l1_ratio = np.float(l1_ratio)
         self.alpha = np.float(alpha)
@@ -72,7 +72,7 @@ def save_model(model, model_path):
 
 def load_model(model_path): 
     try: 
-        model = ElasticNetSklearn.load(model_path)        
+        model = Regressor.load(model_path)        
     except: 
         raise Exception(f'''Error loading the trained {MODEL_NAME} model. 
             Do you have the right trained model in path: {model_path}?''')
