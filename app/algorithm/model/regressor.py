@@ -11,12 +11,11 @@ from sklearn.metrics import mean_squared_error
 
 model_params_fname = "model_params.save"
 model_fname = "model.save"
-history_fname = "history.json"
-MODEL_NAME = "ElasticNetSklearn"
+MODEL_NAME = "reg_base_elasticnet_sklearn"
 
 
 class Regressor():     
-    def __init__(self, l1_ratio=0.1, alpha=1, **kwargs) -> None:
+    def __init__(self, l1_ratio=1e-3, alpha=0.1, **kwargs) -> None:
         self.l1_ratio = np.float(l1_ratio)
         self.alpha = np.float(alpha)
         
@@ -30,8 +29,6 @@ class Regressor():
     
     
     def fit(self, train_X, train_y):        
-                 
-    
         self.model.fit(
                 X = train_X,
                 y = train_y

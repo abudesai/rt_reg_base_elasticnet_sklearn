@@ -1,7 +1,7 @@
 [
   {
     "name": "l1_ratio",
-    "short_desc": "L1/L2 regularization penalty.",   
+    "short_desc": "L1/L2 regularization penalty.",
     "default": 1e-3,
     "type": "real",
     "range_low": 1e-9,
@@ -11,9 +11,9 @@
   },
 
   {
-    "name":"alpha", 
-    "short_desc":"Multiplies L1/L2 parameter penalty.",
-    "default": 0.5,
+    "name": "alpha",
+    "short_desc": "Multiplies L1/L2 parameter penalty.",
+    "default": 0.1,
     "type": "real",
     "range_low": 0.000001,
     "range_high": 0.999,
