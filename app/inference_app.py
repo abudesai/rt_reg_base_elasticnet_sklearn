@@ -12,7 +12,7 @@ warnings.filterwarnings('ignore')
 
 import algorithm.utils as utils
 from algorithm.model_server import ModelServer
-from algorithm.model import classifier as model
+from algorithm.model import regressor as model
 
 
 prefix = '/opt/ml_vol/'
