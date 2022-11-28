@@ -40,6 +40,6 @@ The data preprocessing step includes:
 
 HPT includes choosing the optimal values for alpha and l1_ratio.
 
-During the model development process, the algorithm was trained and evaluated on a variety of datasets such as abalone, auto_prices, computer_activity, heart_disease, white_wine, and ailerons.
+During the model development process, the algorithm was trained and evaluated on a variety of datasets such as abalone, ailerons, auto_prices, computer_activity, diamond, energy, heart_disease, house_prices, medical_costs, and white_wine.
 
 The main programming language is Python. Other tools include Scikit-Learn for main algorithm, feature-engine and Scikit-Learn for preprocessing, Scikit-Learn for calculating model metrics, Scikit-Optimize for HPT, Flask + Nginx + gunicorn for web service. The web service provides two endpoints- /ping for health check and /infer for predictions in real time.

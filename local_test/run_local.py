@@ -205,11 +205,11 @@ def run_train_and_test(dataset_name, run_hpt, num_hpt_trials):
 
 if __name__ == "__main__":
     
-    num_hpt_trials = 30
+    num_hpt_trials = 10
     run_hpt_list = [False, True]
-    run_hpt_list = [False]
+    run_hpt_list = [True]
     
-    datasets = ["abalone", "auto_prices", "computer_activity", "heart_disease", "white_wine", "ailerons"]
+    datasets = ["abalone", "ailerons", "auto_prices", "computer_activity", "diamond", "energy", "heart_disease", "house_prices", "medical_costs", "white_wine" ]
     # datasets = ["heart_disease"]
     
     for run_hpt in run_hpt_list:
